@@ -1,4 +1,5 @@
 function tests()
+    clear all;
     clc;
     fprintf("\n\033[34m===== Running Tests =====\033[0m\n");
     
