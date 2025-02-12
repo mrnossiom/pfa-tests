@@ -2,6 +2,8 @@ function tests()
     clc;
     fprintf("\n\033[34m===== Running Tests =====\033[0m\n");
     
+    epsilon = 1e-3;
+    
     % Helper function for colored output
     function print_result(name, success)
         if success
@@ -9,6 +11,19 @@ function tests()
         else
             fprintf("\033[31m[ERROR]\033[0m %s\n", name);
         end
+    end
+
+    
+    function assert_in_range(name, current, expected)
+        if abs(current-expected)<epsilon
+            fprintf("\033[32m[SUCCESS]\033[0m %s\n", name);
+        else
+            fprintf("\033[31m[ERROR]\033[0m %s (current: %d / expected: %d)\n", name, current, expected);
+        end
+    end
+
+    function assert_integration(name, itg, f, a, b, n, expected)
+        assert_in_range(name, itg.integrate(f, a, b, n), expected);
     end
     
     try
