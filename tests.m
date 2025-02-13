@@ -45,6 +45,10 @@ function tests()
         fprintf("\n\033[34m===== Set & Get Tests =====\033[0m\n");
         itg.set("method", "gauss2", "dx", 0.1);
         print_result("Set method and dx", strcmp(itg.get("method"), "gauss2") && itg.get("dx") == 0.1);
+        itg.set("method", "gauss2", "dx", 0.1, "method", "trapezes");
+        print_result("Set method *2 and dx", strcmp(itg.get("method"), "trapezes") && itg.get("dx") == 0.1);
+        itg.set("method", "gauss2");
+        print_result("Set method", strcmp(itg.get("method"), "gauss2"));
         
         fprintf("\n\033[34m===== Integration Tests =====\033[0m\n");
         fprintf("\n  \033[34m=== Trapezes Tests ===\033[0m\n");
