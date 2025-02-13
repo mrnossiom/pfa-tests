@@ -35,6 +35,9 @@ function tests()
         fprintf("\n\033[34m===== Constructor Tests =====\033[0m\n");
         itg = integrator("method", "trapezes", "dx", 0.05);
         print_result("Constructor with arguments", strcmp(itg.get("method"), "trapezes") && itg.get("dx") == 0.05);
+
+        itg3 = integrator();
+        print_result("Constructor with no arguments", strcmp(itg3.get("method"), "trapezes") && itg3.get("dx") == 0.1);
         
         itg2 = integrator(itg);
         print_result("Copy constructor", strcmp(itg2.get("method"), "trapezes") && itg2.get("dx") == 0.05);
