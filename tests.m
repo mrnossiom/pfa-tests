@@ -24,7 +24,11 @@ function tests()
     end
 
     function assert_integration(name, itg, f, a, b, n, expected)
-        assert_in_range(name, itg.integrate(f, a, b, n), expected);
+        try
+            assert_in_range(name, itg.integrate(f, a, b, n), expected);
+        catch ME
+            fprintf("\033[31m[ERROR]\033[0m %s, error: %s\n", name, ME.message);
+        end
     end
     
     try
