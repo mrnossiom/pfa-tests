@@ -51,6 +51,11 @@ function tests()
         print_result("Set method", strcmp(itg.get("method"), "gauss2"));
         
         fprintf("\n\033[34m===== Integration Tests =====\033[0m\n");
+
+        fprintf("\n  \033[34m=== Flipped Tests ===\033[0m\n");
+        assert_integration("Flipped integration x^2 (a=1, b=0)", itg, @(x) x.^2, 1, 0, 100, -1/3);
+        assert_integration("Flipped integration xe^x (a=1, b=0)", itg, @(x) x .* exp(x), 1, 0, 100, -1);
+
         fprintf("\n  \033[34m=== Trapezes Tests ===\033[0m\n");
         
         itg.set("method", "trapezes");
