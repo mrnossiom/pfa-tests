@@ -46,7 +46,7 @@ function tests()
         if abs(current-expected)<close_factor
             print_result([], 1);
         else
-            print_result([name, DIM, "\n      - current  : ", WHITE, num2str(current), DIM, "\n      - expected : ", WHITE, num2str(expected), RESET], 1);
+            print_result([name, DIM, "\n      - current  : ", WHITE, num2str(current), DIM, "\n      - expected : ", WHITE, num2str(expected), RESET], 0);
         end
     end
     function assert_integration(name, itg, f, a, b, n, expected)
