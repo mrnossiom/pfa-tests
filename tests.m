@@ -56,6 +56,14 @@ function tests()
             fprintf("\033[31m[ERROR]\033[0m %s, error: %s\n", name, ME.message);
         end
     end
+    function assert_lists(name, current, expected)
+        if ~isequal(size(current), size(expected))
+            print_result(name, 0)
+            return;
+        end
+        print_result(name, all(all(abs(current - expected) < close_factor)));
+    endfunction
+
     
     try
         fprintf([MAGENTA, "=====    CONSTRUCTOR TESTS    =====\n", RESET]);
@@ -110,30 +118,12 @@ function tests()
 
         fprintf([MAGENTA, "=====    INTEGRATION TESTS    =====\n", RESET]);
 
-        fprintf([CYAN, "# FLIPPED\n", RESET]);
         itg = integrator();
-        assert_integration("Flipped integration x^2 (a=1, b=0)", itg, @(x) x.^2, 1, 0, 100, -1/3);
-        assert_integration("Flipped integration xe^x (a=1, b=0)", itg, @(x) x .* exp(x), 1, 0, 100, -1);
-
-        fprintf([CYAN, "# TRAPEZE\n", RESET]);
-        itg.set("method", "trapezes");
-        assert_integration("Trapezoidal integration x^2 (a=0, b=1)", itg, @(x) x.^2, 0, 1, 100, 1/3);
-        assert_integration("Trapezoidal integration sin (a=0, b=2*pi)", itg, @sin, 0, 2*pi, 100, 0);
-        assert_integration("Trapezoidal integration cos (a=0, b=2*pi)", itg, @cos, 0, 2*pi, 100, 0);
-        assert_integration("Trapezoidal integration xsin(x^2) (a=0, b=sqrt(pi))", itg, @(x) x .* sin(x.^2), 0, sqrt(pi), 100, 1);
-        assert_integration("Trapezoidal integration xe^x (a=0, b=1)", itg, @(x) x .* exp(x), 0, 1, 100, 1);
-        
-        fprintf([CYAN, "# GAUSS2\n", RESET]);
-        itg.set("method", "gauss2");
-        assert_integration("Gauss2 integration x", itg, @(x) x, 0, 1, 100, 0.5);
-        assert_integration("Gauss2 integration x^2 (a=0, b=1)", itg, @(x) x.^2, 0, 1, 100, 1/3);
-        assert_integration("Gauss2 integration sin (a=0, b=2*pi)", itg, @sin, 0, 2*pi, 100, 0);
-        assert_integration("Gauss2 integration cos (a=0, b=2*pi)", itg, @cos, 0, 2*pi, 100, 0);
-        assert_integration("Gauss2 integration xsin(x^2) (a=0, b=sqrt(pi))", itg, @(x) x .* sin(x.^2), 0, sqrt(pi), 100, 1);
-        assert_integration("Gauss2 integration xe^x (a=0, b=1)", itg, @(x) x .* exp(x), 0, 1, 100, 1);
 
         fprintf([CYAN, "# LEFT\n", RESET]);
         itg.set("method", "left");
+        assert_integration("Mouli - Left integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.508790249679572);
+        assert_integration("Mouli - Left integration exp(x)", itg, @exp, 1, -1, 5, -2.851738310472693);
         assert_integration("Left integration x", itg, @(x) x, 0, 1, 100, 0.5);
         assert_integration("Left integration exp(x) (a=-1, b=1)", itg, @exp, -1, 1, 5, 1.9116);
         assert_integration("Left integration x^2 (a=0, b=1)", itg, @(x) x.^2, 0, 1, 100, 1/3);
@@ -144,6 +134,8 @@ function tests()
 
         fprintf([CYAN, "# RIGHT\n", RESET]);
         itg.set("method", "right");
+        assert_integration("Mouli - Right integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.842006470041450);
+        assert_integration("Mouli - Right integration exp(x)", itg, @exp, 1, -1, 5, -1.911577355557652);
         assert_integration("Right integration x", itg, @(x) x, 0, 1, 100, 0.5);
         assert_integration("Right integration exp(x) (a=-1, b=1)", itg, @exp, -1, 1, 5, 2.85173831047269);
         assert_integration("Right integration x^2 (a=0, b=1)", itg, @(x) x.^2, 0, 1, 100, 1/3);
@@ -151,14 +143,46 @@ function tests()
         assert_integration("Right integration cos (a=0, b=2*pi)", itg, @cos, 0, 2*pi, 100, 0);
         assert_integration("Right integration xsin(x^2) (a=0, b=sqrt(pi))", itg, @(x) x .* sin(x.^2), 0, sqrt(pi), 100, 1);
         assert_integration("Right integration xe^x (a=0, b=1)", itg, @(x) x .* exp(x), 0, 1, 300, 1);
+
+        fprintf([CYAN, "# MIDDLE\n", RESET]);
+        itg.set("method", "middle");
+        assert_integration("Mouli - Middle integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.723005128722320);
+        assert_integration("Mouli - Middle integration exp(x)", itg, @exp, 1, -1, 5, -2.334805854514639);
+        assert_integration("Middle integration sin(x) (a=0, b=pi)", itg, @sin, 0, pi, 100, 2);
+
+        fprintf([CYAN, "# TRAPEZES\n", RESET]);
+        itg.set("method", "trapezes");
+        assert_integration("Mouli - Trapeze integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.675398359860511);
+        assert_integration("Mouli - Trapeze integration exp(x)", itg, @exp, 1, -1, 5, -2.381657833015172);
+        assert_integration("Trapezoidal integration x^2 (a=0, b=1)", itg, @(x) x.^2, 0, 1, 100, 1/3);
+        assert_integration("Trapezoidal integration sin (a=0, b=2*pi)", itg, @sin, 0, 2*pi, 100, 0);
+        assert_integration("Trapezoidal integration cos (a=0, b=2*pi)", itg, @cos, 0, 2*pi, 100, 0);
+        assert_integration("Trapezoidal integration xsin(x^2) (a=0, b=sqrt(pi))", itg, @(x) x .* sin(x.^2), 0, sqrt(pi), 100, 1);
+        assert_integration("Trapezoidal integration xe^x (a=0, b=1)", itg, @(x) x .* exp(x), 0, 1, 100, 1);
+        
+        fprintf([CYAN, "# SIMPSON\n", RESET]);
+        itg.set("method", "simpson");
+        assert_integration("Mouli - Simpson integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.707136205768384);
+        assert_integration("Mouli - Simpson integration exp(x)", itg, @exp, 1, -1, 5, -2.350423180681484);
+
+        fprintf([CYAN, "# GAUSS2\n", RESET]);
+        itg.set("method", "gauss2");
+        assert_integration("Mouli - Gauss2 integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.707087156152676);
+        assert_integration("Mouli - Gauss2 integration exp(x)", itg, @exp, 1, -1, 5, -2.350388529424686);
+        assert_integration("Gauss2 integration x", itg, @(x) x, 0, 1, 100, 0.5);
+        assert_integration("Gauss2 integration x^2 (a=0, b=1)", itg, @(x) x.^2, 0, 1, 100, 1/3);
+        assert_integration("Gauss2 integration sin (a=0, b=2*pi)", itg, @sin, 0, 2*pi, 100, 0);
+        assert_integration("Gauss2 integration cos (a=0, b=2*pi)", itg, @cos, 0, 2*pi, 100, 0);
+        assert_integration("Gauss2 integration xsin(x^2) (a=0, b=sqrt(pi))", itg, @(x) x .* sin(x.^2), 0, sqrt(pi), 100, 1);
+        assert_integration("Gauss2 integration xe^x (a=0, b=1)", itg, @(x) x .* exp(x), 0, 1, 100, 1);
+
+        fprintf([CYAN, "# GAUSS3\n", RESET]);
+        itg.set("method", "gauss3");
+        assert_integration("Mouli - Gauss3 integration sin(x)", itg, @sin, 0, 3*pi/4, 5, 1.707106790529971);
+        assert_integration("Mouli - Gauss3 integration exp(x)", itg, @exp, 1, -1, 5, -2.350402382538070);
         
         fprintf([CYAN, "# ADDITIONAL\n", RESET]);
 
-        itg.set("method", "middle");
-        I = itg.integrate(@(x) sin(x), 0, pi, 100, []);
-        expected = 2;
-        assert_in_range("Middle-point integration sin(x) over [0, pi]", I, expected);
-        
         itg.set("method", "gauss3");
         I = itg.integrate(@(x) exp(-x.^2), -1, 1, 100, []);
         expected = 1.4936;
