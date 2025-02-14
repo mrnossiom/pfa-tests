@@ -211,5 +211,6 @@ function tests()
     catch ME
         fprintf("\033[31m[ERROR]\033[0m Test failed: %s\n", ME.message);
     end
+    fprintf([RESET])
 end
 
