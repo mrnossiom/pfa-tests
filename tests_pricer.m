@@ -16,7 +16,7 @@ function tests_pricer()
     RESET   = "\033[0m";
 
     fprintf([BLUE, "Tests made for PFA @EPITA\n", WHITE, "Contributors :\n", RESET, "   - Shiro G. (ST1)\n   - Eliott L. (C2)\n"]);
-    fprintf([BLUE, "[DISCLAIMER] ", RED, "Tests are made by student, and are not by any mean official, please refer to the official moulinette for sure tests\n(06 32 92 20 67)\n\n\n", RESET]);
+    fprintf([BLUE, "[DISCLAIMER] ", RED, "Tests are made by student, and are not by any mean official, please refer to the official moulinette for sure tests\n\n\n", RESET]);
 
     fprintf([CYAN, "### RUNNING TESTS ###\n\n", RESET]);
 
