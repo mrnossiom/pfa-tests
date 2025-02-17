@@ -59,26 +59,32 @@ function tests_pricer()
     try
         fprintf([MAGENTA, "=====       f_logN TESTS      =====\n", RESET]);
         % Test 1: Standard Case (m=0, s=1)
-        expected = [9.902386649591815e-04 2.815901890152683e-01 3.989422804014327e-01 2.185071483032721e-02 2.815901890152680e-03 3.790837692938267e-06 9.902386649591761e-08];
+        expected = [9.90238e-04 2.81590e-01 3.98942e-01 2.18507e-02 2.81590e-03 3.79083e-06 9.90238e-08];
         value = pricer.f_logN(0, 1, [0.01, 0.1, 1, 5, 10, 50, 100]);
         assert_lists("Standard Case (m=0, s=1)", value, expected)
         % Test 2: Mean Shift (m=1, s=1)
-        expected = [1.707930831120359e-02 2.419707245191434e-01 1.467778801534336e-01 1.707930831120357e-02 6.006101107306473e-06];
+        expected = [1.70793e-02 2.41970e-01 1.46777e-01 1.70793e-02 6.00610e-06];
         value = pricer.f_logN(1, 1, [0.1, 1, 2.718, 10, 100]);
         assert_lists("Mean Shift (m=1, s=1)", value, expected)
         % Test 3: Higher Spread (m=0, s=2)
-        expected = [1.028151074041252e+00 1.994711402007164e-01 1.028151074041252e-02 1.407950945076340e-04];
+        expected = [1.02815e+00 1.99471e-01 1.02815e-02 1.40795e-04];
         value = pricer.f_logN(0, 2, [0.1, 1, 10, 100]);
         assert_lists("Higher Spread (m=0, s=2)", value, expected)
         % Test 4: Edge Cases
         value = pricer.f_logN(0, 1, [0, -1, NaN, Inf]);
         print_result("Edge Cases", value(1) == 0 && isnan(value(2)) && isnan(value(3)) && value(4) == 0)
         % Test 5: Very Small s=0.1
-        expected = [2.962479925349095e-114 3.989422804014327e+00 2.962479925348759e-116];
+        expected = [2.96247e-114 3.98942e+00 2.96247e-116];
         value = pricer.f_logN(0, 0.1, [0.1, 1, 10]);
         assert_lists("Very Small s=0.1", value, expected)
 
         fprintf([MAGENTA, "=====         Phi TESTS       =====\n", RESET]);
+        assert_in_range("Phi(0)", Phi(pricer, 0), 0.5)
+        assert_in_range("Phi(1)", Phi(pricer, 1), 0.84134)
+        assert_in_range("Phi(2)", Phi(pricer, 2), 0.97724)
+        assert_in_range("Phi(3)", Phi(pricer, 3), 0.99865)
+        assert_in_range("Phi(4)", Phi(pricer, 4), 0.99996)
+        assert_in_range("Phi(-1)", Phi(pricer, -1), 0.15865)
 
         fprintf([MAGENTA, "=====     price_call TESTS    =====\n", RESET]);
 
