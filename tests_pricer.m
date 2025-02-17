@@ -87,6 +87,47 @@ function tests_pricer()
         assert_in_range("Phi(-1)", Phi(pricer, -1), 0.15865)
 
         fprintf([MAGENTA, "=====     price_call TESTS    =====\n", RESET]);
+        % Test 1: Standard Case (S0=100, T=1, K=100, m=0, s=1)
+        value = price_call(pricer, 100, 1, 100, 0, 1);
+        expected = 38.29241;
+        assert_in_range("Standard Case (S0=100, T=1, K=100, m=0, s=1)", value, expected);
+        % Test 2: Deep In-The-Money Call (S0=150, T=1, K=100, m=0, s=1)
+        value = price_call(pricer, 150, 1, 100, 0, 1);
+        expected = 76.37411;
+        assert_in_range("Deep In-The-Money Call (S0=150, T=1, K=100, m=0, s=1)", value, expected);
+        % Test 3: Deep Out-Of-The-Money Call (S0=50, T=1, K=100, m=0, s=1)
+        value = price_call(pricer, 50, 1, 100, 0, 1);
+        expected = 9.53022;
+        assert_in_range("Deep Out-Of-The-Money Call (S0=50, T=1, K=100, m=0, s=1)", value, expected);
+        % Test 4: High Volatility (S0=100, T=1, K=100, m=0, s=2)
+        value = price_call(pricer, 100, 1, 100, 0, 2);
+        expected = 68.26854;
+        assert_in_range("High Volatility (S0=100, T=1, K=100, m=0, s=2)", value, expected);
+        % Test 5: Long-Term Option (S0=100, T=5, K=100, m=0, s=1)
+        value = price_call(pricer, 100, 5, 100, 0, 1);
+        expected = 73.64425;
+        assert_in_range("Long-Term Option (S0=100, T=5, K=100, m=0, s=1)", value, expected);
+        % Test 6: Short-Term Option (S0=100, T=0.1, K=100, m=0, s=1)
+        value = price_call(pricer, 100, 0.1, 100, 0, 1);
+        expected = 12.56329;
+        assert_in_range("Short-Term Option (S0=100, T=0.1, K=100, m=0, s=1)", value, expected);
+        % Test 7: Low Strike Price (S0=100, T=1, K=50, m=0, s=1)
+        value = price_call(pricer, 100, 1, 50, 0, 1);
+        expected = 59.53022;
+        assert_in_range("Low Strike Price (S0=100, T=1, K=50, m=0, s=1)", value, expected);
+        % Test 8: High Strike Price (S0=100, T=1, K=200, m=0, s=1)
+        value = price_call(pricer, 100, 1, 200, 0, 1);
+        expected = 19.06045;
+        assert_in_range("High Strike Price (S0=100, T=1, K=200, m=0, s=1)", value, expected);
+        % Test 9: Edge Case - Zero Volatility (S0=100, T=1, K=100, m=0, s=0.01)
+        value = price_call(pricer, 100, 1, 100, 0, 0.01);
+        expected = 0.39894;
+        assert_in_range("Edge Case - Zero Volatility (S0=100, T=1, K=100, m=0, s=0.01)", value, expected);
+        % Test 10: Edge Case - Very Long-Term Option (S0=100, T=20, K=100, m=0, s=1)
+        value = price_call(pricer, 100, 20, 100, 0, 1);
+        expected = 97.46465;
+        assert_in_range("Edge Case - Very Long-Term Option (S0=100, T=20, K=100, m=0, s=1)", value, expected);
+
 
         fprintf([MAGENTA, "=====     price_put TESTS     =====\n", RESET]);
 
