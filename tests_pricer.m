@@ -197,27 +197,21 @@ function tests_pricer()
         value = F_S(pricer, [0.3, 0.4, 0.3], 0, 1, [0.1, 1, 5, 10]);
         expected = [0.30426 0.53403 0.92688 0.98576];
         assert_in_range("Standard Case (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])", value, expected);
-
         % Test 2: Different Probabilities (p=[0.1, 0.6, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])
         value = F_S(pricer, [0.1, 0.6, 0.3], 0, 1, [0.1, 1, 5, 10]);
         expected = [0.10639 0.43403 0.91615 0.9837];
         assert_in_range("Different Probabilities (p=[0.1, 0.6, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])", value, expected);
-
         % Test 3: High Variance (p=[0.3, 0.4, 0.3], m=0, s=2, x=[0.1, 1, 10, 100])
         value = F_S(pricer, [0.3, 0.4, 0.3], 0, 2, [0.1, 1, 10, 100]);
         expected = [0.35242 0.55777 0.83746 0.78937];
         assert_in_range("High Variance (p=[0.3, 0.4, 0.3], m=0, s=2, x=[0.1, 1, 10, 100])", value, expected);
-
         % Test 4: Edge Cases (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0, -1, NaN, Inf])
         value = F_S(pricer, [0.3, 0.4, 0.3], 0, 1, [0, -1, NaN, Inf]);
         print_result("Edge Cases (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0, -1, NaN, Inf])", value(1) == 0.3 && isnan(value(2)) && isnan(value(3)) && isnan(value(4)))
-
         % Test 5: Very Small s (p=[0.3, 0.4, 0.3], m=0, s=0.1, x=[0.1, 1, 10])
         value = F_S(pricer, [0.3, 0.4, 0.3], 0, 0.1, [0.1, 1, 10]);
         expected = [0.3 0.5 1];
         assert_in_range("Very Small s (p=[0.3, 0.4, 0.3], m=0, s=0.1, x=[0.1, 1, 10])", value, expected);
-
-
 
         fprintf("\n\n");
         
