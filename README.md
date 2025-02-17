@@ -1,4 +1,4 @@
-# Integrator Testing Suite
+# Integrator/Pricer Testing Suite
 
 This repository contains a testing suite for the `integrator` and `pricer` classes in GNU Octave. The `tests_integrator.m` and `tests_pricer.m` scripts provide a comprehensive set of tests for verifying the correctness of the integration methods, primitive calculations, and error estimation for `integrator`; and finance tests for the `pricer` part.
 
