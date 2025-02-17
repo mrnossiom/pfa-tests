@@ -1,4 +1,4 @@
-function tests()
+function tests_integrator()
     clear all;
     clc;
 
