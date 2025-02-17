@@ -176,28 +176,47 @@ function tests_pricer()
         value = f_sum_logN(pricer, 0, 1, [0.1, 1, 5, 10]);
         expected = [3.61306e-04 2.62422e-01 6.63391e-02 9.33204e-03];
         assert_in_range("Standard Case (m=0, s=1, x=[0.1, 1, 5, 10])", value, expected);
-
         % Test 2: Different Mean (m=1, s=1, x=[0.1, 1, 2.718, 10, 100])
         value = f_sum_logN(pricer, 1, 1, [0.1, 1, 2.718, 10, 100]);
         expected = [2.97452e-07 1.96293e-02 9.65336e-02 4.53668e-02 1.51246e-05];
         assert_in_range("Different Mean (m=1, s=1, x=[0.1, 1, 2.718, 10, 100])", value, expected);
-
         % Test 3: High Volatility (m=0, s=2, x=[0.1, 1, 10, 100])
         value = f_sum_logN(pricer, 0, 2, [0.1, 1, 10, 100]);
         expected = [1.55322e-01 1.82255e-01 1.88519e-02 1.96093e-04];
         assert_in_range("High Volatility (m=0, s=2, x=[0.1, 1, 10, 100])", value, expected);
-
         % Test 4: Edge Cases (m=0, s=1, x=[0, -1, NaN, Inf])
         value = f_sum_logN(pricer, 0, 1, [0, -1, NaN, Inf]);
         print_result("Edge Cases (m=0, s=1, x=[0, -1, NaN, Inf])", value(1) == 0 && isnan(value(2)) && isnan(value(3)) && value(4) == 0)
-
         % Test 5: Very Small s (m=0, s=0.1, x=[0.1, 1, 10])
         value = f_sum_logN(pricer, 0, 0.1, [0.1, 1, 10]);
         expected = [0 5.90359e-21 1.22272e-103];
         assert_in_range("Very Small s (m=0, s=0.1, x=[0.1, 1, 10])", value, expected);
 
-
         fprintf([MAGENTA, "=====         F_S TESTS       =====\n", RESET]);
+        % Test 1: Standard Case (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])
+        value = F_S(pricer, [0.3, 0.4, 0.3], 0, 1, [0.1, 1, 5, 10]);
+        expected = [0.30426 0.53403 0.92688 0.98576];
+        assert_in_range("Standard Case (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])", value, expected);
+
+        % Test 2: Different Probabilities (p=[0.1, 0.6, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])
+        value = F_S(pricer, [0.1, 0.6, 0.3], 0, 1, [0.1, 1, 5, 10]);
+        expected = [0.10639 0.43403 0.91615 0.9837];
+        assert_in_range("Different Probabilities (p=[0.1, 0.6, 0.3], m=0, s=1, x=[0.1, 1, 5, 10])", value, expected);
+
+        % Test 3: High Variance (p=[0.3, 0.4, 0.3], m=0, s=2, x=[0.1, 1, 10, 100])
+        value = F_S(pricer, [0.3, 0.4, 0.3], 0, 2, [0.1, 1, 10, 100]);
+        expected = [0.35242 0.55777 0.83746 0.78937];
+        assert_in_range("High Variance (p=[0.3, 0.4, 0.3], m=0, s=2, x=[0.1, 1, 10, 100])", value, expected);
+
+        % Test 4: Edge Cases (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0, -1, NaN, Inf])
+        value = F_S(pricer, [0.3, 0.4, 0.3], 0, 1, [0, -1, NaN, Inf]);
+        print_result("Edge Cases (p=[0.3, 0.4, 0.3], m=0, s=1, x=[0, -1, NaN, Inf])", value(1) == 0.3 && isnan(value(2)) && isnan(value(3)) && isnan(value(4)))
+
+        % Test 5: Very Small s (p=[0.3, 0.4, 0.3], m=0, s=0.1, x=[0.1, 1, 10])
+        value = F_S(pricer, [0.3, 0.4, 0.3], 0, 0.1, [0.1, 1, 10]);
+        expected = [0.3 0.5 1];
+        assert_in_range("Very Small s (p=[0.3, 0.4, 0.3], m=0, s=0.1, x=[0.1, 1, 10])", value, expected);
+
 
 
         fprintf("\n\n");
